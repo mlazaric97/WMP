@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string> 
 #include <vector> 
-
+#include <complex>
+#include <memory>
 namespace WMP {
 	#include "WMP/reader.hpp"
 	#include "WMP/Neutron.hpp"
