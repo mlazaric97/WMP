@@ -1,0 +1,5 @@
+/users/mlazaric/WMP/build/CMakeFiles/edit_cache.dir
+/users/mlazaric/WMP/build/CMakeFiles/rebuild_cache.dir
+/users/mlazaric/WMP/build/bin/CMakeFiles/WMP.exe.dir
+/users/mlazaric/WMP/build/bin/CMakeFiles/edit_cache.dir
+/users/mlazaric/WMP/build/bin/CMakeFiles/rebuild_cache.dir

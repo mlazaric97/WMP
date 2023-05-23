@@ -1,0 +1,6 @@
+
+void test_read(std::string filename)
+{
+	H5::H5File file(filename);	
+
+}
