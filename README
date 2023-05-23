@@ -1,3 +1,11 @@
 Implementation of Windowed multipole to be used in MCNP 
 
+
+installation: 
+	from ~/path_to_WMP/WMP/
+	mkdir build
+	cmake ..
+	make
+
+
 Author: Matthew J. Lazaric 
