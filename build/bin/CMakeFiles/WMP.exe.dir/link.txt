@@ -1,1 +1,0 @@
-/usr/projects/hpcsoft/toss3/common/x86_64/gcc/10.3.0/bin/g++ CMakeFiles/WMP.exe.dir/WMP.cpp.o -o WMP.exe 
