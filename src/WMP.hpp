@@ -6,8 +6,7 @@
 #include <vector> 
 #include <complex>
 #include <memory>
-#include "hdf5.h"
-
+#include "H5Cpp.h"
 namespace WMP {
 	#include "WMP/reader.hpp"
 	#include "WMP/Neutron.hpp"

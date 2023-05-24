@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(WMP LANGUAGES CXX)
+project(WMP LANGUAGES CXX C)
 
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(WMP INTERFACE)
-target_include_directories( WMP INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+find_package(HDF5 REQUIRED COMPONENTS C CXX )
 
-include(./cmake/dependencies.cmake)
+include_directories(${HDF5_INCLUDE_DIR} ${HDF5_CXX_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src/)
 
 add_compile_options(-O3 -Wall)
 

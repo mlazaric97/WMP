@@ -1,5 +1,7 @@
 add_executable(WMP.exe WMP.cpp)
 	
 target_link_libraries(WMP.exe 
+	WMP
+	${HDF5_CXX_LIBRARY_NAMES}
 	${HDF5_LIBRARIES}
 	)

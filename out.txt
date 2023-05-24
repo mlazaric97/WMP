@@ -1,0 +1,54 @@
+-- The CXX compiler identification is GNU 8.5.0
+-- Checking whether CXX compiler has -isysroot
+-- Checking whether CXX compiler has -isysroot - yes
+-- Checking whether CXX compiler supports OSX deployment target flag
+-- Checking whether CXX compiler supports OSX deployment target flag - yes
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Users/mlazaric/.local/brew/Cellar/gcc@8/8.5.0/bin/g++-8 - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found HDF5: /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5_cpp.dylib;/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/Users/mlazaric/.local/brew/opt/libaec/lib/libsz.dylib;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libz.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libdl.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libm.tbd (found version "1.12.2") found components: CXX 
+-- CMAKE_CXX_STANDARD = 17
+-- CMAKE_CXX_STANDARD_REQUIRED = ON
+-- FIND_PACKAGE_MESSAGE_DETAILS_HDF5 = [/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5_cpp.dylib;/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/Users/mlazaric/.local/brew/opt/libaec/lib/libsz.dylib;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libz.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libdl.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libm.tbd][cfound components: CXX ][v1.12.2()]
+-- HDF5_COMPILER_NO_INTERROGATE = FALSE
+-- HDF5_CONSIDERED_CONFIGS = 
+-- HDF5_CONSIDERED_VERSIONS = 
+-- HDF5_CXX_COMPILER_EXECUTABLE = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/bin/h5c++
+-- HDF5_CXX_COMPILER_NO_INTERROGATE = FALSE
+-- HDF5_CXX_COMPILE_LINE = clang++ -I/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/include -I/Users/mlazaric/.local/brew/opt/libaec/include -c /Users/mlazaric/WMP/build/CMakeFiles/hdf5/cmake_hdf5_test.cxx
+clang++ -I/Users/mlazaric/.local/brew/opt/libaec/include cmake_hdf5_test.o -L/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib -lhdf5_hl_cpp -lhdf5_cpp -lhdf5_hl -lhdf5 -L/Users/mlazaric/.local/brew/opt/libaec/lib -lsz -lz -ldl -lm
+-- HDF5_CXX_FOUND = TRUE
+-- HDF5_CXX_HL_LIBRARY_NAMES = hdf5_hl_cpp;hdf5_hl
+-- HDF5_CXX_INCLUDE_DIRS = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/include;/Users/mlazaric/.local/brew/opt/libaec/include
+-- HDF5_CXX_IS_PARALLEL = FALSE
+-- HDF5_CXX_LIBRARIES = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5_cpp.dylib;/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/Users/mlazaric/.local/brew/opt/libaec/lib/libsz.dylib;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libz.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libdl.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libm.tbd
+-- HDF5_CXX_LIBRARY_DIRS = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib;/Users/mlazaric/.local/brew/opt/libaec/lib
+-- HDF5_CXX_LIBRARY_NAMES = hdf5_cpp;hdf5;sz;z;dl;m
+-- HDF5_CXX_LIBRARY_dl = /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libdl.tbd
+-- HDF5_CXX_LIBRARY_hdf5 = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib
+-- HDF5_CXX_LIBRARY_hdf5_cpp = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5_cpp.dylib
+-- HDF5_CXX_LIBRARY_m = /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libm.tbd
+-- HDF5_CXX_LIBRARY_sz = /Users/mlazaric/.local/brew/opt/libaec/lib/libsz.dylib
+-- HDF5_CXX_LIBRARY_z = /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libz.tbd
+-- HDF5_CXX_RETURN_VALUE = 0
+-- HDF5_CXX_VERSION = 1.12.2
+-- HDF5_C_COMPILER_NAMES = h5cc;h5pcc
+-- HDF5_DIFF_EXECUTABLE = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/bin/h5diff
+-- HDF5_DIR = HDF5_DIR-NOTFOUND
+-- HDF5_FIND_HL = OFF
+-- HDF5_FOUND = TRUE
+-- HDF5_Fortran_COMPILER_NAMES = h5fc;h5pfc
+-- HDF5_INCLUDE_DIR = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/include;/Users/mlazaric/.local/brew/opt/libaec/include
+-- HDF5_INCLUDE_DIRS = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/include;/Users/mlazaric/.local/brew/opt/libaec/include
+-- HDF5_IS_PARALLEL = FALSE
+-- HDF5_LANGUAGE_BINDINGS = CXX
+-- HDF5_LIBRARIES = /Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5_cpp.dylib;/Users/mlazaric/.local/brew/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/Users/mlazaric/.local/brew/opt/libaec/lib/libsz.dylib;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libz.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libdl.tbd;/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/lib/libm.tbd
+-- HDF5_REQUIRED_VARS = HDF5_LIBRARIES
+-- HDF5_VALID_LANGUAGE_BINDINGS = C;CXX;Fortran
+-- HDF5_VERSION = 1.12.2
+-- hdf5_target_name = hdf5_cpp
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/mlazaric/WMP/build
