@@ -8,7 +8,6 @@ const std::string& DATASET_NAME("DATA");
 
 int main(void)
 {
-	WMP::test_read(FILE_NAME);
-
-	return 0; 
+	WMP::h5fileptr f = WMP::test_read(FILE_NAME);
+	WMP::test_find(f);
 }

@@ -8,11 +8,7 @@ const std::string& DATASET_NAME("DATA");
 
 int main(void)
 {
-	Exception::dontPrint();
-
-H5File file(FILE_NAME, H5F_ACC_RDONLY);
-	DataSet dataset = file.openDataSet(DATASET_NAME);
-	H5T_class_t type_class = dataset.getTypeClass();
-
+	WMP::h5fileptr f = WMP::test_read(FILE_NAME);
+	WMP::test_find(f);
 	return 0; 
 }

@@ -30,6 +30,9 @@ class neutron {
 	std::string filename; 
 	double A;   // atomic weight (NOT Atomic weight ratio)
 	double beta; // temperature 
+	double E_max;
+	double E_min; 
+	std::vector<bool> broaden_poly;
 
 
 }; 
