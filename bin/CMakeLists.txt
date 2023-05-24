@@ -1,2 +1,2 @@
 add_executable(WMP.exe WMP.cpp)
-target_link_libraries(WMP.exe PRIVATE POLR) 
+target_link_libraries(WMP.exe PRIVATE WMP) 
