@@ -2,7 +2,7 @@
 
 typedef std::shared_ptr<H5::H5File> h5fileptr;
 
-h5fileptr test_read(const std::string& filename)
+h5fileptr openhdf(const std::string& filename)
 {
 	std::cout << H5F_ACC_RDONLY << std::endl; 
 	H5::Exception::dontPrint();
@@ -15,6 +15,14 @@ h5fileptr test_read(const std::string& filename)
 	return h5fileptr(f); 
 
 }
+
+std::vector
+
+
+
+
+
+
 
 void test_find(h5fileptr filename)
 {

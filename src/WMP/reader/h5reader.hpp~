@@ -19,6 +19,6 @@ h5fileptr test_read(const std::string& filename)
 void test_find(h5fileptr filename)
 {
 	H5::H5File f = *filename; 
-	f.close();
+	std::cout << f.getFileSize() << std::endl;
 	
 }
