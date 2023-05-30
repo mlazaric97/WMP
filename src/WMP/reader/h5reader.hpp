@@ -1,5 +1,4 @@
 
-
 typedef std::shared_ptr<H5::H5File> h5fileptr;
 
 h5fileptr openhdf(const std::string& filename)
@@ -16,12 +15,21 @@ h5fileptr openhdf(const std::string& filename)
 
 }
 
+<<<<<<< HEAD
 std::vector
+=======
+
+
+typedef std::shared_ptr<H5::Group> grp_ptr;
+
+grp_ptr get_iso_grp(const H5::H5std_string ISO_NAME); 
+>>>>>>> b0141ad (tuesday commits, hdf5 dataset reader fixed, moving functionality of WMP.cpp to header file)
 
 
 
 
 
+<<<<<<< HEAD
 
 
 void test_find(h5fileptr filename)
@@ -30,3 +38,5 @@ void test_find(h5fileptr filename)
 	std::cout << f.getFileSize() << std::endl;
 	
 }
+=======
+>>>>>>> b0141ad (tuesday commits, hdf5 dataset reader fixed, moving functionality of WMP.cpp to header file)
