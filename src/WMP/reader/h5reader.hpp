@@ -256,12 +256,53 @@ void get_data(const H5::Group &isogroup)
 		{
 			std::cout << "(" << i << "," << j <<"):\n     "
 			       	  << data_out[i][j].r << "\n     "   
-				  << data_out[i][j].i << "\n}," << std::endl; 
+				  << data_out[i][j].i << "\n}," << "\n"; 
 		}
 	}
-
+	std::cout << "Successfully read and loaded DataSet: " << name << std::endl;
 
 }
 
+void get_windows(H5::Group &iso_group)
+{
+	int Nx,Ny; 
+	std::string name = "windows"; 
+	std::cout << "Loading Dataset: 'windows' \n"; 
+	H5::DataSet wind;
+	try{
+		wind = iso_group.openDataSet(name.c_str());
+	} catch(const H5::DataSetIException error) {
+		std::cout << "ERROR LOADING DATASET: 'windows' \n";
+		error.printErrorStack();
+		abort;
+	}
+
+	// get dataspace 
+	H5::DataSpace ds = wind.getSpace();
+	// finding rank and dimensions
+	int rank = ds.getSimpleExtentNdims();
+	hsize_t dims[2]; 
+	int ndims = ds.getSimpleExtentDims(dims,NULL);
+	Nx = dims[0];
+	Ny = dims[1]; 
+
+	// dataset 'windows' is a set of integers
+	int buf[Nx][Ny]; 
+
+	try{
+		wind.read(buf,H5::PredType::NATIVE_INT);
+	} catch( H5::DataSetIException error) {	
+		std::cout << "ERROR READING DATASET: 'windows' \n";
+		error.printErrorStack();
+		abort; 
+	}
+
+	for (int i{}; i < Nx; ++i)
+		std::cout << "(" << i << ",0): " << buf[i][0] << ", " << buf[i][1] << "\n";
+
+
+
+
+}
 
 

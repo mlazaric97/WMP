@@ -16,7 +16,7 @@ int main(void)
 	WMP::get_bp(isogrp); 	
 	WMP::get_curvefit(isogrp); 
 	WMP::get_data(isogrp); 		
-	
+	WMP::get_windows(isogrp); 	
 	
 /*
 	WMP::h5fileptr data_file = WMP::openhdf(FILE_NAME);
