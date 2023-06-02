@@ -2,6 +2,11 @@ typedef std::shared_ptr<H5::Group>  h5fileptr;
 typedef std::shared_ptr<H5::Group>  h5grpptr; 
 //typedef std::shared_ptr<H5::DataSet> h5dsptr; 
 
+typedef struct comp_type {
+	float r;
+	float i; 
+	} comp_type; 
+
 // A lot of this code is taken from the hdf5 C++ example "readdata.cpp"
 // opens and returns a pointer to and hdf5 file denoted by FILENAME; 
 H5::H5File openhdf(const H5std_string FILENAME)
@@ -178,7 +183,7 @@ void get_curvefit(H5::Group &isogroup)
 	std::cout << "[" << Nx << ", " << Ny << ", " << Nz << "]\n";
 
 
-	float buf[Nx][Ny][Nz];// +1's prevent a seg fault when reading in the data  
+	float buf[Nx][Ny][Nz];//  
 	try{
 		crvft.read(buf,H5::PredType::NATIVE_FLOAT); 
 	} catch(H5::DataSetIException error){
@@ -196,6 +201,66 @@ void get_curvefit(H5::Group &isogroup)
 		
 		}
 	}
+	std::cout << "Succesfully read DataSet: 'curvefit' " << std::endl; 
+}
+
+void get_data(const H5::Group &isogroup)
+{
+	std::cout << "Loading DataSet: 'data'\n";
+	std::string name = "data";
+	int Nx,Ny; // dimensions of dataset
+	H5::DataSet ds;
+	try{ 
+		ds = isogroup.openDataSet(name.c_str());
+	} catch(const H5::DataSetIException error){
+		std::cout << "ERROR OPENING DATASET: 'data'\n";
+		error.printErrorStack();
+		abort; 
+	}
+	std::cout << "Successfully opened DataSet: 'data'\n";
+
+	// getting dataspace
+	H5::DataSpace dataspace = ds.getSpace(); 
+	
+	H5::CompType  ct(sizeof(comp_type));
+	
+	ct.insertMember("r",HOFFSET(comp_type,r), H5::PredType::NATIVE_FLOAT);
+	ct.insertMember("i",HOFFSET(comp_type,i), H5::PredType::NATIVE_FLOAT);
+	
+		
+	H5std_string  r = ct.getMemberName(0); 
+	H5std_string  i = ct.getMemberName(1);
+
+	// getting dimensions
+	int rank = dataspace.getSimpleExtentNdims();
+	hsize_t dims[2];
+	int ndims = dataspace.getSimpleExtentDims(dims,NULL);
+	Nx = dims[0];
+	Ny = dims[1]; 
+	std::cout << "[" << Nx << "," << Ny << "]\n";
+
+	comp_type data_out[Nx][Ny];
+	
+	
+	try{ 
+		ds.read(&data_out,ct);
+	} catch(const H5::DataSetIException error) {
+		std::cout << "ERROR READING DATASET 'data'\n";
+		error.printErrorStack(); 
+		abort; 
+	}
+	
+	for (int i{}; i < Nx; ++i)
+	{
+		for (int j{}; j < Ny; ++j)
+		{
+			std::cout << "(" << i << "," << j <<"):\n     "
+			       	  << data_out[i][j].r << "\n     "   
+				  << data_out[i][j].i << "\n}," << std::endl; 
+		}
+	}
+
+
 }
 
 

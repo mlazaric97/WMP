@@ -15,7 +15,7 @@ int main(void)
 	WMP::get_E_bounds(isogrp); 	
 	WMP::get_bp(isogrp); 	
 	WMP::get_curvefit(isogrp); 
-		
+	WMP::get_data(isogrp); 		
 	
 	
 /*
