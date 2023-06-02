@@ -12,12 +12,10 @@ int main(void)
 {
 	H5File file = WMP::openhdf(FILE_NAME);
 	Group  isogrp = WMP::open_isogroup(ISO_GROUP,file); 	
-	WMP::get_E_max(isogrp); 	
-	
-
-
-	std::cout << "here" << std::endl; 
-	
+	WMP::get_E_bounds(isogrp); 	
+	WMP::get_bp(isogrp); 	
+	WMP::get_curvefit(isogrp); 
+		
 	
 	
 /*
