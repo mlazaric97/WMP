@@ -1,15 +1,18 @@
 #include "WMP.hpp"
 using namespace H5;
 
-const H5std_string FILE_NAME("019039.h5");
-const H5std_string BASE_GROUP("/");
-const H5std_string ISO_GROUP("K39");
-const H5std_string DATASET_NAME("E_max");
+const std::string FILE_NAME("092238.h5");
+const std::string BASE_GROUP("/");
+const std::string ISO_GROUP("U238");
+const std::string DATASET_NAME("E_max");
 
 
 
 int main(void)
 {
+	WMP::Neutron nn(FILE_NAME); 
+	nn.print_cf(0,0); 
+	/*
 	H5File file = WMP::openhdf(FILE_NAME);
 	Group  isogrp = WMP::open_isogroup(ISO_GROUP,file); 	
 	WMP::get_E_bounds(isogrp); 	
@@ -17,8 +20,11 @@ int main(void)
 	WMP::get_curvefit(isogrp); 
 	WMP::get_data(isogrp); 		
 	WMP::get_windows(isogrp); 	
-	
+	WMP::get_symb(file);	
+	*/
+
 /*
+ 
 	WMP::h5fileptr data_file = WMP::openhdf(FILE_NAME);
 	Group g1 = data_file->openGroup(BASE_GROUP);
 	Group g2 = g1.openGroup(ISO_GROUP);

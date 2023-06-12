@@ -1,7 +1,7 @@
 typedef std::shared_ptr<H5::Group>  h5fileptr; 
 typedef std::shared_ptr<H5::Group>  h5grpptr; 
 //typedef std::shared_ptr<H5::DataSet> h5dsptr; 
-
+// defining the following to read "data" 
 typedef struct comp_type {
 	float r;
 	float i; 
@@ -9,14 +9,14 @@ typedef struct comp_type {
 
 // A lot of this code is taken from the hdf5 C++ example "readdata.cpp"
 // opens and returns a pointer to and hdf5 file denoted by FILENAME; 
-H5::H5File openhdf(const H5std_string FILENAME)
+H5::H5File openhdf(std::string FILENAME)
 {	
 	std::cout << "Opening data file: " << FILENAME << std::endl; 
 	H5::Exception::dontPrint();
 	
 	H5::H5File f; 
 	try { 
-		f = H5::H5File(FILENAME,H5F_ACC_RDONLY);
+		f = H5::H5File(FILENAME.c_str(),H5F_ACC_RDONLY);
 	} catch( const H5::FileIException error) {	
 		std::cout << "ERROR OPENING DATAFILE: " << FILENAME << std::endl;
 		error.printErrorStack(); 
@@ -25,9 +25,17 @@ H5::H5File openhdf(const H5std_string FILENAME)
 	return f; 
 }
 
+std::string get_symb(H5::H5File &file)
+{
+	std::string sym; 
+	ssize_t symsize = file.getObjnameByIdx(0,sym,5);
+	std::cout << "Name = " << sym << std::endl; 
+	return sym; 
+}
+
 // Opens the "/" group at root of all WMP_library files
 // then opens the isotope group denoted by GROUPNAME and returns a pointer to it 
-H5::Group open_isogroup(const H5std_string GROUPNAME,H5::H5File &file)
+H5::Group open_isogroup(const std::string GROUPNAME,H5::H5File &file)
 {
 	std::cout << "Opening Group: '/'" << std::endl; 
 	H5::Exception::dontPrint();
@@ -41,7 +49,7 @@ H5::Group open_isogroup(const H5std_string GROUPNAME,H5::H5File &file)
 	}
 	std::cout << "Opened Group:" << GROUPNAME << std::endl << "Opening Isotope Group\n";	
 	try {
-		 isog = g.openGroup(GROUPNAME);
+		 isog = g.openGroup(GROUPNAME.c_str());
 	} catch( const H5::GroupIException error) {
 		std::cout << "ERROR OPENING ISOTOPE GROUP" << std::endl; 
 		error.printErrorStack();
@@ -88,7 +96,7 @@ void get_E_bounds(H5::Group &isogroup)
 
 }
 
-void get_bp(H5::Group &iso_group)
+std::vector<int> get_bp(H5::Group &iso_group)
 {
 	std::cout << "Loading Dataset: 'broaden_poly'\n";
 	H5::Exception::dontPrint(); 
@@ -132,17 +140,17 @@ void get_bp(H5::Group &iso_group)
 	dimsm[0] = dims_out[0]; 
 	dimsm[1] = rank;
 	bp.read(buf,H5::PredType::NATIVE_INT);
-	
+ 	std::vector<int> bpvec(dimsm[0],0);	
 	for (int i{}; i < dims_out[0]; ++i)
 	{
-		if (i%20 == 0) {std::cout << std::endl; }
-		std::cout <<" " << buf[i];
-		
+		bpvec[i] = buf[i];
 	}
-	std::cout << std::endl; 
+		
+	return bpvec; 
+
 }
 
-void get_curvefit(H5::Group &isogroup)
+std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 {
 	int Nx,Ny,Nz; // data dimensions;
 	std::string name = "curvefit";
@@ -181,9 +189,9 @@ void get_curvefit(H5::Group &isogroup)
 	dimsm[1] = Ny; 
 	dimsm[2] = Nz; 
 	std::cout << "[" << Nx << ", " << Ny << ", " << Nz << "]\n";
+	std::vector<std::vector<std::vector<float>>> curvefit; 
 
-
-	float buf[Nx][Ny][Nz];//  
+	float buf[Nx][Ny][Nz];// buffer for data in curvefit dataset  
 	try{
 		crvft.read(buf,H5::PredType::NATIVE_FLOAT); 
 	} catch(H5::DataSetIException error){
@@ -192,16 +200,26 @@ void get_curvefit(H5::Group &isogroup)
 		abort; 
 	}
 	
+	std::vector<std::vector<float>> temp3; 
 	for (int i{}; i < Nx; ++i)
 	{
+		std::vector<std::vector<float>> temp2; 
 		for (int j{}; j < Ny; ++j)
 		{
-			std::cout << "(" << i << "," << j << "," << "0" << "):"; 
-			std::cout << buf[i][j][0] << ", " << buf[i][j][1] << ",\n";
-		
+			std::vector<float> temp; 
+			for (int k{}; k < Nz; ++k)
+			{
+				
+				temp.push_back(buf[i][j][k]);	
+		//	std::cout << "(" << i << "," << j << "," << "0" << "):"; 
+		//	std::cout << buf[i][j][0] << ", " << buf[i][j][1] << ",\n";
+			}
+			temp2.push_back(temp); 
 		}
+		curvefit.push_back(temp2);
 	}
 	std::cout << "Succesfully read DataSet: 'curvefit' " << std::endl; 
+	return curvefit; 
 }
 
 void get_data(const H5::Group &isogroup)
