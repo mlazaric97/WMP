@@ -60,7 +60,32 @@ H5::Group open_isogroup(const std::string GROUPNAME,H5::H5File &file)
 	return isog; 
 }
 
-void get_E_bounds(H5::Group &isogroup)
+float get_E_bounds(H5::Group &isogroup, std::string maxormin)
+{
+	std::cout << "Loading Dataset: '" << maxormin << "' \n"; 
+	H5::Exception::dontPrint(); 
+	H5::DataSet emin; 
+
+	try {
+		emin = isogroup.openDataSet(maxormin.c_str()); 
+	} catch(const H5::DataSetIException error) {
+		std::cout << "ERROR OPENING DATASET: '" << maxormin << "' \n";
+		error.printErrorStack();
+		exit; 
+	}
+	std::cout << "Successfully opened Dataset: '" << maxormin << "' \n";
+	
+	// E_min is a scalar float, don't have to worry about data dimensions
+	float buf[1];
+       	emin.read(buf,H5::PredType::NATIVE_FLOAT);	
+	std::cout << "Succesfully loaded data from Dataset: '" << maxormin << "'" << std::endl; 
+
+	return buf[0]; 
+}
+
+
+
+void get_E_bounds2(H5::Group &isogroup)
 {
 	std::cout << "Loading Dataset: 'E_max' \n";
 	H5::Exception::dontPrint();
@@ -93,7 +118,6 @@ void get_E_bounds(H5::Group &isogroup)
 	emax.read(ebuf1,H5::PredType::NATIVE_FLOAT);	
 	emin.read(ebuf2,H5::PredType::NATIVE_FLOAT);
 	std::cout << "Energy range: [" << *ebuf2 << ", " << *ebuf1 << "]" << std::endl; 
-
 }
 
 std::vector<int> get_bp(H5::Group &iso_group)
@@ -222,7 +246,7 @@ std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 	return curvefit; 
 }
 
-void get_data(const H5::Group &isogroup)
+std::vector<std::vector<std::complex<float>>> get_data(const H5::Group &isogroup)
 {
 	std::cout << "Loading DataSet: 'data'\n";
 	std::string name = "data";
@@ -244,8 +268,7 @@ void get_data(const H5::Group &isogroup)
 	
 	ct.insertMember("r",HOFFSET(comp_type,r), H5::PredType::NATIVE_FLOAT);
 	ct.insertMember("i",HOFFSET(comp_type,i), H5::PredType::NATIVE_FLOAT);
-	
-		
+			
 	H5std_string  r = ct.getMemberName(0); 
 	H5std_string  i = ct.getMemberName(1);
 
@@ -259,7 +282,7 @@ void get_data(const H5::Group &isogroup)
 
 	comp_type data_out[Nx][Ny];
 	
-	
+	// writes data onto 'data_out'
 	try{ 
 		ds.read(&data_out,ct);
 	} catch(const H5::DataSetIException error) {
@@ -267,21 +290,21 @@ void get_data(const H5::Group &isogroup)
 		error.printErrorStack(); 
 		abort; 
 	}
-	
+	std::vector<std::vector<std::complex<float>>> data(Nx, (std::vector<std::complex<float>>(Ny))) ;
 	for (int i{}; i < Nx; ++i)
 	{
 		for (int j{}; j < Ny; ++j)
 		{
-			std::cout << "(" << i << "," << j <<"):\n     "
-			       	  << data_out[i][j].r << "\n     "   
-				  << data_out[i][j].i << "\n}," << "\n"; 
+			std::complex a(data_out[i][j].r,data_out[i][j].i);
+			data[i][j] = a; 
 		}
 	}
-	std::cout << "Successfully read and loaded DataSet: " << name << std::endl;
-
+	std::cout << "data[5][2] = " << data[5][2] << std::endl; 
+	std::cout << "Successfully read and loaded DataSet: " << name << std::endl << std::endl;
+	return data; 
 }
 
-void get_windows(H5::Group &iso_group)
+std::vector<std::vector<int>> get_windows(H5::Group &iso_group)
 {
 	int Nx,Ny; 
 	std::string name = "windows"; 
@@ -314,11 +337,16 @@ void get_windows(H5::Group &iso_group)
 		error.printErrorStack();
 		abort; 
 	}
-
+	std::vector<std::vector<int>> windows(Nx, (std::vector<int>(2))); 
 	for (int i{}; i < Nx; ++i)
-		std::cout << "(" << i << ",0): " << buf[i][0] << ", " << buf[i][1] << "\n";
+	{	
+		windows[i][0] = buf[i][0]; 
+		windows[i][1] = buf[i][1]; 
+		
 
-
+	}	
+	std::cout << "windows[22] = [" << windows[22][0] << ", " << windows[22][1] << "]" << std::endl;
+	return windows; 
 
 
 }

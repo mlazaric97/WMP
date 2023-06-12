@@ -11,7 +11,7 @@ class Neutron {
 	private: 
 	std::vector<std::vector<std::vector<float>>> curvefit;
 	std::vector<std::vector<std::complex<float>>> data; 	
-	std::vector<std::tuple<int,int>> windows;
+	std::vector<std::vector<int>> windows;
 	std::vector<float> ceoff;
        	std::vector<int> broaden_poly; 	
 	std::string name;  
@@ -35,7 +35,7 @@ class Neutron {
 	
 	std::cout << "\nPrinting Curvefit Value:\n (" << i <<"," << j 
 		  << "," << ":" << length << ") =";
-	for (int k{}; k <= length; ++k)
+	for (int k{}; k < length; ++k)
 	{
 		std::cout << curvefit[i][j][k] << ", ";	
 	}
