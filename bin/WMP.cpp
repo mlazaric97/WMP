@@ -7,11 +7,10 @@ const std::string ISO_GROUP("U238");
 const std::string DATASET_NAME("E_max");
 
 
-
 int main(void)
 {
 	WMP::Neutron nn(FILE_NAME); 
-	nn.print_cf(0,0); 
+	nn.xs(10,0,1);	
 	/*
 	H5File file = WMP::openhdf(FILE_NAME);
 	Group  isogrp = WMP::open_isogroup(ISO_GROUP,file); 	

@@ -22,6 +22,8 @@ H5::H5File openhdf(std::string FILENAME)
 		error.printErrorStack(); 
 		exit; 
 	}
+
+	std::cout << "Successfully opened: " << FILENAME << std::endl; 
 	return f; 
 }
 
@@ -47,7 +49,7 @@ H5::Group open_isogroup(const std::string GROUPNAME,H5::H5File &file)
 		erro.printErrorStack(); 
 		exit; 
 	}
-	std::cout << "Opened Group:" << GROUPNAME << std::endl << "Opening Isotope Group\n";	
+	std::cout << "Opened Group: '/' " << std::endl << "Opening Isotope Group\n";	
 	try {
 		 isog = g.openGroup(GROUPNAME.c_str());
 	} catch( const H5::GroupIException error) {
@@ -83,7 +85,34 @@ float get_E_bounds(H5::Group &isogroup, std::string maxormin)
 	return buf[0]; 
 }
 
+float get_spacing(H5::Group &isogroup)
+{
+	std::cout << "Loading Dataset: 'spacing' \n";
+	H5::Exception::dontPrint();
+	H5::DataSet spacing;
+	
+	try { 
+		spacing = isogroup.openDataSet("spacing");
+	} catch(const H5::DataSetIException error) {
+		std::cout << "ERROR OPENING DATASET: 'spacing' \n";
+		error.printErrorStack();
+		exit;
+	}
+	float buf[1]; 
+	spacing.read(buf,H5::PredType::NATIVE_FLOAT);
+	std::cout << "Succesfully loaded data from Dataset: 'spacing'" << std::endl; 
 
+	return buf[0]; 
+}
+
+int get_order(H5::Group &isogroup)
+{
+	std::cout << "Loading Dataset: 'order' \n";
+	H5::Exception::dontPrint();
+	H5::DataSet order;
+	
+	try{
+		order = isogroup.openDataSet("order")
 
 void get_E_bounds2(H5::Group &isogroup)
 {
@@ -153,8 +182,8 @@ std::vector<int> get_bp(H5::Group &iso_group)
 	hsize_t dims_out[2]; 
 
 	int ndims = dataspace.getSimpleExtentDims(dims_out,NULL); 
-	std::cout << "'broaden_poly' rank: "<< rank << "\n";
-	std::cout << "'broaden_poly  length: " <<  (unsigned long)(dims_out[0]) << std::endl;
+	//std::cout << "'broaden_poly' rank: "<< rank << "\n";
+	//std::cout << "'broaden_poly  length: " <<  (unsigned long)(dims_out[0]) << std::endl;
 
 	// buffer initialization
 	int buf[(unsigned long)(dims_out[0])]; 
@@ -201,10 +230,11 @@ std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 	int rank = ds.getSimpleExtentNdims();	
 	hsize_t dims_out[3]; 
 	int ndims = ds.getSimpleExtentDims(dims_out,NULL); 
-	std::cout << "curvefit rank = " << rank << "\ncurvefit dimensions = " << (unsigned long)(dims_out[0]) 
+	/*
+	   std::cout << "curvefit rank = " << rank << "\ncurvefit dimensions = " << (unsigned long)(dims_out[0]) 
 		<< " x " << (unsigned long)(dims_out[1]) <<" x " <<  (unsigned long)(dims_out[2]) << 
 		std::endl; 
-	
+	*/
 	Nx = dims_out[0];
 	Ny = dims_out[1]; 
 	Nz = dims_out[2]; 
@@ -212,7 +242,7 @@ std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 	dimsm[0] = Nx;
 	dimsm[1] = Ny; 
 	dimsm[2] = Nz; 
-	std::cout << "[" << Nx << ", " << Ny << ", " << Nz << "]\n";
+	//std::cout << "[" << Nx << ", " << Ny << ", " << Nz << "]\n";
 	std::vector<std::vector<std::vector<float>>> curvefit; 
 
 	float buf[Nx][Ny][Nz];// buffer for data in curvefit dataset  
@@ -278,7 +308,7 @@ std::vector<std::vector<std::complex<float>>> get_data(const H5::Group &isogroup
 	int ndims = dataspace.getSimpleExtentDims(dims,NULL);
 	Nx = dims[0];
 	Ny = dims[1]; 
-	std::cout << "[" << Nx << "," << Ny << "]\n";
+	//std::cout << "[" << Nx << "," << Ny << "]\n";
 
 	comp_type data_out[Nx][Ny];
 	
@@ -299,7 +329,7 @@ std::vector<std::vector<std::complex<float>>> get_data(const H5::Group &isogroup
 			data[i][j] = a; 
 		}
 	}
-	std::cout << "data[5][2] = " << data[5][2] << std::endl; 
+	//std::cout << "data[5][2] = " << data[5][2] << std::endl; 
 	std::cout << "Successfully read and loaded DataSet: " << name << std::endl << std::endl;
 	return data; 
 }
@@ -345,10 +375,8 @@ std::vector<std::vector<int>> get_windows(H5::Group &iso_group)
 		
 
 	}	
-	std::cout << "windows[22] = [" << windows[22][0] << ", " << windows[22][1] << "]" << std::endl;
+//	std::cout << "windows[22] = [" << windows[22][0] << ", " << windows[22][1] << "]" << std::endl;
 	return windows; 
-
-
 }
 
 

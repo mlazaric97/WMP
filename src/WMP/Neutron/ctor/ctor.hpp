@@ -17,7 +17,7 @@ Neutron(std::string filename)
        	this->E_max = get_E_bounds(isogroup,"E_max"); 	
 	this->data = get_data(isogroup); 
 	this->windows = get_windows(isogroup); 
-
+	this->spacing = get_spacing(isogroup); 
 	std::cout << "Finished loading in data for: '" << this->name << "'\n";	
 	// close file
 	file.close();
