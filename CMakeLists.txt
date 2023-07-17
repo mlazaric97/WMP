@@ -1,18 +1,24 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(WMP LANGUAGES CXX C)
+project(WMP LANGUAGES C CXX)
 
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(HDF5 REQUIRED COMPONENTS C CXX )
-#find_package(cerf REQUIRED ON) can't get it working :/ 
+find_package(cerf REQUIRED ON COMPONENTS C CXX) #can't get it working :/ 
+
+# this was to get around my linker not finding the .h files it should have
+# I don't know why libcerf doesn't have a found variable, I'm probably missing something
+# Unless the file structure in libcerf changes radically I think this is pretty standard 
 
 
-
+set(cerf_INCLUDE_DIR ${cerf_DIR}/../../../include/)
 
 include_directories(${HDF5_INCLUDE_DIR}
        		    ${HDF5_CXX_INCLUDE_DIRS}
+		    ${cerf_DIR}
+		    ${cerf_INCLUDE_DIR}
 		    ${CMAKE_SOURCE_DIR}/src/) #cerf_DIR
 
 add_compile_options(-O3 -Wall)

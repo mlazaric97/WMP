@@ -9,5 +9,7 @@ if (NOT TARGET HDF5)
 endif()
 
 target_link_libraries(WMP
-	INTERFACE HDF5
+	INTERFACE hdf5
+	INTERFACE hdf5_cpp
+	INTERFACE cerf::cerfcpp
 	)

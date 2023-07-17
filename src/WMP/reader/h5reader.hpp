@@ -3,8 +3,8 @@ typedef std::shared_ptr<H5::Group>  h5grpptr;
 //typedef std::shared_ptr<H5::DataSet> h5dsptr; 
 // defining the following to read "data" 
 typedef struct comp_type {
-	float r;
-	float i; 
+	double r;
+	double i; 
 	} comp_type; 
 
 // A lot of this code is taken from the hdf5 C++ example "readdata.cpp"
@@ -62,7 +62,7 @@ H5::Group open_isogroup(const std::string GROUPNAME,H5::H5File &file)
 	return isog; 
 }
 
-float get_E_bounds(H5::Group &isogroup, std::string maxormin)
+double get_E_bounds(H5::Group &isogroup, std::string maxormin)
 {
 	std::cout << "Loading Dataset: '" << maxormin << "' \n"; 
 	H5::Exception::dontPrint(); 
@@ -77,15 +77,15 @@ float get_E_bounds(H5::Group &isogroup, std::string maxormin)
 	}
 	std::cout << "Successfully opened Dataset: '" << maxormin << "' \n";
 	
-	// E_min is a scalar float, don't have to worry about data dimensions
-	float buf[1];
-       	emin.read(buf,H5::PredType::NATIVE_FLOAT);	
+	// E_min is a scalar double, don't have to worry about data dimensions
+	double buf[1];
+       	emin.read(buf,H5::PredType::NATIVE_DOUBLE);	
 	std::cout << "Succesfully loaded data from Dataset: '" << maxormin << "'" << std::endl; 
 
 	return buf[0]; 
 }
 
-float get_spacing(H5::Group &isogroup)
+double get_spacing(H5::Group &isogroup)
 {
 	std::cout << "Loading Dataset: 'spacing' \n";
 	H5::Exception::dontPrint();
@@ -98,21 +98,12 @@ float get_spacing(H5::Group &isogroup)
 		error.printErrorStack();
 		exit;
 	}
-	float buf[1]; 
-	spacing.read(buf,H5::PredType::NATIVE_FLOAT);
+	double buf[1]; 
+	spacing.read(buf,H5::PredType::NATIVE_DOUBLE);
 	std::cout << "Succesfully loaded data from Dataset: 'spacing'" << std::endl; 
 
 	return buf[0]; 
 }
-
-int get_order(H5::Group &isogroup)
-{
-	std::cout << "Loading Dataset: 'order' \n";
-	H5::Exception::dontPrint();
-	H5::DataSet order;
-	
-	try{
-		order = isogroup.openDataSet("order")
 
 void get_E_bounds2(H5::Group &isogroup)
 {
@@ -143,9 +134,9 @@ void get_E_bounds2(H5::Group &isogroup)
 
 
 	// We know that E_max contains a single value of H5T_IEEE_F64LE
-	float ebuf1[1],ebuf2[1]; 
-	emax.read(ebuf1,H5::PredType::NATIVE_FLOAT);	
-	emin.read(ebuf2,H5::PredType::NATIVE_FLOAT);
+	double ebuf1[1],ebuf2[1]; 
+	emax.read(ebuf1,H5::PredType::NATIVE_DOUBLE);	
+	emin.read(ebuf2,H5::PredType::NATIVE_DOUBLE);
 	std::cout << "Energy range: [" << *ebuf2 << ", " << *ebuf1 << "]" << std::endl; 
 }
 
@@ -203,7 +194,7 @@ std::vector<int> get_bp(H5::Group &iso_group)
 
 }
 
-std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
+std::vector<std::vector<std::vector<double>>> get_curvefit(H5::Group &isogroup)
 {
 	int Nx,Ny,Nz; // data dimensions;
 	std::string name = "curvefit";
@@ -224,7 +215,9 @@ std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 	H5::DataSpace ds = crvft.getSpace();
 	//Checking that type is correct
 	H5T_class_t type = crvft.getTypeClass();
-	if (type != H5T_FLOAT) { std::cout << "ERROR: WRONG DATA TYPE IN DATASET: '" << name << "'\n"; abort;}
+	//if (type != H5T_FLOAT) { std::cout << "ERROR: WRONG DATA TYPE IN DATASET: '" << name << "'\n"; abort;}
+	// ABOVE LINE WAS REMOVED AS I AM PLAYING WITH DATA TYPES
+	// IDEAL WOULD BE FLOAT VS DOUBLE AGNOSTIC JUST SO WE CAN HAVE OPTIONS 
 	
 	// finding dimensions of the dataspace
 	int rank = ds.getSimpleExtentNdims();	
@@ -243,24 +236,24 @@ std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 	dimsm[1] = Ny; 
 	dimsm[2] = Nz; 
 	//std::cout << "[" << Nx << ", " << Ny << ", " << Nz << "]\n";
-	std::vector<std::vector<std::vector<float>>> curvefit; 
+	std::vector<std::vector<std::vector<double>>> curvefit; 
 
-	float buf[Nx][Ny][Nz];// buffer for data in curvefit dataset  
+	double buf[Nx][Ny][Nz];// buffer for data in curvefit dataset  
 	try{
-		crvft.read(buf,H5::PredType::NATIVE_FLOAT); 
+		crvft.read(buf,H5::PredType::NATIVE_DOUBLE); 
 	} catch(H5::DataSetIException error){
 		std::cout << "ERROR READING 'curvefit' DATA\n";
 		error.printErrorStack();
 		abort; 
 	}
 	
-	std::vector<std::vector<float>> temp3; 
+	std::vector<std::vector<double>> temp3; 
 	for (int i{}; i < Nx; ++i)
 	{
-		std::vector<std::vector<float>> temp2; 
+		std::vector<std::vector<double>> temp2; 
 		for (int j{}; j < Ny; ++j)
 		{
-			std::vector<float> temp; 
+			std::vector<double> temp; 
 			for (int k{}; k < Nz; ++k)
 			{
 				
@@ -276,7 +269,7 @@ std::vector<std::vector<std::vector<float>>> get_curvefit(H5::Group &isogroup)
 	return curvefit; 
 }
 
-std::vector<std::vector<std::complex<float>>> get_data(const H5::Group &isogroup)
+std::vector<std::vector<std::complex<double>>> get_data(const H5::Group &isogroup)
 {
 	std::cout << "Loading DataSet: 'data'\n";
 	std::string name = "data";
@@ -296,8 +289,8 @@ std::vector<std::vector<std::complex<float>>> get_data(const H5::Group &isogroup
 	
 	H5::CompType  ct(sizeof(comp_type));
 	
-	ct.insertMember("r",HOFFSET(comp_type,r), H5::PredType::NATIVE_FLOAT);
-	ct.insertMember("i",HOFFSET(comp_type,i), H5::PredType::NATIVE_FLOAT);
+	ct.insertMember("r",HOFFSET(comp_type,r), H5::PredType::NATIVE_DOUBLE);
+	ct.insertMember("i",HOFFSET(comp_type,i), H5::PredType::NATIVE_DOUBLE);
 			
 	H5std_string  r = ct.getMemberName(0); 
 	H5std_string  i = ct.getMemberName(1);
@@ -320,7 +313,7 @@ std::vector<std::vector<std::complex<float>>> get_data(const H5::Group &isogroup
 		error.printErrorStack(); 
 		abort; 
 	}
-	std::vector<std::vector<std::complex<float>>> data(Nx, (std::vector<std::complex<float>>(Ny))) ;
+	std::vector<std::vector<std::complex<double>>> data(Nx, (std::vector<std::complex<double>>(Ny))) ;
 	for (int i{}; i < Nx; ++i)
 	{
 		for (int j{}; j < Ny; ++j)
