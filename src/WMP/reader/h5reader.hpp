@@ -17,10 +17,10 @@ H5::H5File openhdf(std::string FILENAME)
 	H5::H5File f; 
 	try { 
 		f = H5::H5File(FILENAME.c_str(),H5F_ACC_RDONLY);
-	} catch( const H5::FileIException error) {	
+	} catch( const H5::FileIException& error) {	
 		std::cout << "ERROR OPENING DATAFILE: " << FILENAME << std::endl;
 		error.printErrorStack(); 
-		exit; 
+		std::abort(); 
 	}
 
 	std::cout << "Successfully opened: " << FILENAME << std::endl; 
@@ -44,18 +44,18 @@ H5::Group open_isogroup(const std::string GROUPNAME,H5::H5File &file)
 	H5::Group g, isog;
 	try {
 		g = file.openGroup("/"); 
-	} catch( const H5::GroupIException erro) {
+	} catch( const H5::GroupIException& error) {
 		std::cout << "ERROR OPENING BASE GROUP" << std::endl; 
-		erro.printErrorStack(); 
-		exit; 
+		error.printErrorStack(); 
+		std::abort(); 
 	}
 	std::cout << "Opened Group: '/' " << std::endl << "Opening Isotope Group\n";	
 	try {
 		 isog = g.openGroup(GROUPNAME.c_str());
-	} catch( const H5::GroupIException error) {
+	} catch( const H5::GroupIException& error) {
 		std::cout << "ERROR OPENING ISOTOPE GROUP" << std::endl; 
 		error.printErrorStack();
-		exit; 
+		std::abort();  
 	}	
 	std::cout << "Successfully opened Isotope Group: "<< GROUPNAME << std::endl; 
 	
@@ -70,10 +70,10 @@ double get_E_bounds(H5::Group &isogroup, std::string maxormin)
 
 	try {
 		emin = isogroup.openDataSet(maxormin.c_str()); 
-	} catch(const H5::DataSetIException error) {
+	} catch(const H5::DataSetIException& error) {
 		std::cout << "ERROR OPENING DATASET: '" << maxormin << "' \n";
 		error.printErrorStack();
-		exit; 
+		std::abort(); 
 	}
 	std::cout << "Successfully opened Dataset: '" << maxormin << "' \n";
 	
@@ -93,10 +93,10 @@ double get_spacing(H5::Group &isogroup)
 	
 	try { 
 		spacing = isogroup.openDataSet("spacing");
-	} catch(const H5::DataSetIException error) {
+	} catch(const H5::DataSetIException& error) {
 		std::cout << "ERROR OPENING DATASET: 'spacing' \n";
 		error.printErrorStack();
-		exit;
+		std::abort(); 
 	}
 	double buf[1]; 
 	spacing.read(buf,H5::PredType::NATIVE_DOUBLE);
@@ -113,11 +113,11 @@ void get_E_bounds2(H5::Group &isogroup)
 	H5::DataSet emax;
 	try {	
 		emax = isogroup.openDataSet("E_max"); 
-	} catch(const H5::FileIException error) {
+	} catch(const H5::FileIException& error) {
 		std::cout << "ERROR OPENING DATASET: 'E_max'\n";
 		error.printErrorStack();
-		exit; 
-	}
+		std::abort();
+	}	
 	std::cout << "Successfully opened DataSet 'E_max' " << std::endl;
 	std::cout << "Loading Dataset: 'E_min' \n"; 
 
@@ -125,10 +125,10 @@ void get_E_bounds2(H5::Group &isogroup)
 
 	try{ 
 		emin = isogroup.openDataSet("E_min"); 
-	} catch( const H5::FileIException error) {
+	} catch( const H5::FileIException& error) {
 		std::cout << "ERROR OPENING DATASET: 'E_min'\n";
 		error.printErrorStack();
-		exit; 
+		std::abort(); 
 	}
 	std::cout << "Successfully opened DataSet 'E_min'\n";
 
@@ -149,10 +149,10 @@ std::vector<int> get_bp(H5::Group &iso_group)
 	std::string name = "broaden_poly";
 	try{ 
 		bp = iso_group.openDataSet(name.c_str()); 
-	} catch( const H5::FileIException error) {
+	} catch( const H5::FileIException& error) {
 		std::cout << "ERROR OPENING DATASET: 'broaden_poly'\n";
 		error.printErrorStack();
-		exit; 
+		std::abort(); 
 	}
 	std::cout << "Succesfully opened DataSet 'broaden_poly'\n";
 	// Size of broaden_poly dataset is based on number of windows and is not constant
@@ -162,7 +162,7 @@ std::vector<int> get_bp(H5::Group &iso_group)
 	if (type != H5T_INTEGER)
 	{
 		std::cout << "ERROR: INVALID DATA TYPE IN 'broaden_poly' DATASET\n";
-	       	exit; 
+		std::abort();  
 	}
 	
 	H5::IntType inttype = bp.getIntType(); 
@@ -185,7 +185,7 @@ std::vector<int> get_bp(H5::Group &iso_group)
 	dimsm[1] = rank;
 	bp.read(buf,H5::PredType::NATIVE_INT);
  	std::vector<int> bpvec(dimsm[0],0);	
-	for (int i{}; i < dims_out[0]; ++i)
+	for (long long unsigned int i{}; i < dims_out[0]; ++i) // i is this type to avoid error, could have also cast dims_out[0] to int
 	{
 		bpvec[i] = buf[i];
 	}
@@ -202,11 +202,11 @@ std::vector<std::vector<std::vector<double>>> get_curvefit(H5::Group &isogroup)
 	std::cout << "Opening DataSet: " << name << std::endl; 
 	try {
 		crvft = isogroup.openDataSet(name.c_str());
-	} catch( const H5::DataSetIException error)
+	} catch(const H5::DataSetIException& error)
 	{
 		std::cout << "ERROR OPENING DATASET: " << name << std::endl; 
 		error.printErrorStack();
-		abort; 
+		std::abort(); 
 	}
 	std::cout << "Successfully opened DataSet: " << name << std::endl; 
 
@@ -231,6 +231,7 @@ std::vector<std::vector<std::vector<double>>> get_curvefit(H5::Group &isogroup)
 	Nx = dims_out[0];
 	Ny = dims_out[1]; 
 	Nz = dims_out[2]; 
+
 	hsize_t dimsm[3]; 
 	dimsm[0] = Nx;
 	dimsm[1] = Ny; 
@@ -241,10 +242,10 @@ std::vector<std::vector<std::vector<double>>> get_curvefit(H5::Group &isogroup)
 	double buf[Nx][Ny][Nz];// buffer for data in curvefit dataset  
 	try{
 		crvft.read(buf,H5::PredType::NATIVE_DOUBLE); 
-	} catch(H5::DataSetIException error){
+	} catch(H5::DataSetIException& error){
 		std::cout << "ERROR READING 'curvefit' DATA\n";
 		error.printErrorStack();
-		abort; 
+		std::abort(); 
 	}
 	
 	std::vector<std::vector<double>> temp3; 
@@ -277,10 +278,10 @@ std::vector<std::vector<std::complex<double>>> get_data(const H5::Group &isogrou
 	H5::DataSet ds;
 	try{ 
 		ds = isogroup.openDataSet(name.c_str());
-	} catch(const H5::DataSetIException error){
+	} catch(const H5::DataSetIException& error){
 		std::cout << "ERROR OPENING DATASET: 'data'\n";
 		error.printErrorStack();
-		abort; 
+		std::abort();
 	}
 	std::cout << "Successfully opened DataSet: 'data'\n";
 
@@ -308,10 +309,10 @@ std::vector<std::vector<std::complex<double>>> get_data(const H5::Group &isogrou
 	// writes data onto 'data_out'
 	try{ 
 		ds.read(&data_out,ct);
-	} catch(const H5::DataSetIException error) {
+	} catch(const H5::DataSetIException& error) {
 		std::cout << "ERROR READING DATASET 'data'\n";
 		error.printErrorStack(); 
-		abort; 
+		std::abort(); 
 	}
 	std::vector<std::vector<std::complex<double>>> data(Nx, (std::vector<std::complex<double>>(Ny))) ;
 	for (int i{}; i < Nx; ++i)
@@ -335,10 +336,10 @@ std::vector<std::vector<int>> get_windows(H5::Group &iso_group)
 	H5::DataSet wind;
 	try{
 		wind = iso_group.openDataSet(name.c_str());
-	} catch(const H5::DataSetIException error) {
+	} catch(const H5::DataSetIException& error) {
 		std::cout << "ERROR LOADING DATASET: 'windows' \n";
 		error.printErrorStack();
-		abort;
+		std::abort(); 
 	}
 
 	// get dataspace 
@@ -355,10 +356,10 @@ std::vector<std::vector<int>> get_windows(H5::Group &iso_group)
 
 	try{
 		wind.read(buf,H5::PredType::NATIVE_INT);
-	} catch( H5::DataSetIException error) {	
+	} catch( H5::DataSetIException& error) {	
 		std::cout << "ERROR READING DATASET: 'windows' \n";
 		error.printErrorStack();
-		abort; 
+		std::abort();
 	}
 	std::vector<std::vector<int>> windows(Nx, (std::vector<int>(2))); 
 	for (int i{}; i < Nx; ++i)

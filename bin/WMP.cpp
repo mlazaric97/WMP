@@ -16,7 +16,7 @@ int main(void)
 	double E = 100.; // eV
 	std::vector<double> Es(10,0); 
 	Es[0] = E; 
-	for (int i = 1; i < Es.size(); ++i)
+	for (int i = 1; i < static_cast<int>(Es.size()); ++i)
 	{
 		Es[i] = Es[i-1] + 1;
 	}

@@ -16,8 +16,7 @@ find_package(cerf REQUIRED ON COMPONENTS C CXX) #can't get it working :/
 set(cerf_INCLUDE_DIR ${cerf_DIR}/../../../include/)
 
 include_directories(${HDF5_INCLUDE_DIR}
-       		    ${HDF5_CXX_INCLUDE_DIRS}
-		    ${cerf_DIR}
+	# ${HDF5_CXX_INCLUDE_DIRS}
 		    ${cerf_INCLUDE_DIR}
 		    ${CMAKE_SOURCE_DIR}/src/) #cerf_DIR
 

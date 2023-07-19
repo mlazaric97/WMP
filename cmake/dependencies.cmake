@@ -8,8 +8,11 @@ if (NOT TARGET HDF5)
 	FetchContent_MakeAvailable( HDF5 )
 endif()
 
+
 target_link_libraries(WMP
-	INTERFACE hdf5
-	INTERFACE hdf5_cpp
+	INTERFACE ${HDF5_LIBRARIES}
+        INTERFACE ${HDF5_CXX_LIBRARIES}	
+
+target_link_libraries(WMP
 	INTERFACE cerf::cerfcpp
 	)
