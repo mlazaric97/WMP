@@ -1,25 +1,32 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(WMP LANGUAGES CXX)
+project(WMP LANGUAGES C CXX Fortran)
 
-
-get_directory_property(_vars_before VARIABLES)
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(WMP INTERFACE)
-target_include_directories( WMP INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+add_library(${PROJECT_NAME} STATIC "")
 
-#include(./cmake/dependencies.cmake)
-FINDHDF5()
-find_package(HDF5 REQUIRED COMPONENTS CXX )
-include_directories(${HDF5_INCLUDE_DIR} ${HDF5_CXX_INCLUDE_DIRS})
-get_directory_property(_vars VARIABLES)
-list(REMOVE_ITEM _vars _vars_before ${_vars_before})
-foreach(_var IN LISTS _vars)
-	message(STATUS "${_var} = ${${_var}}")
-endforeach()
+target_include_directories(${PROJECT_NAME}
+	PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+		)		
 
+find_package(HDF5 REQUIRED COMPONENTS C CXX )
+find_package(cerf REQUIRED ON COMPONENTS C CXX) #can't get it working :/ 
+
+# this was to get around my linker not finding the .h files it should have
+# I don't know why libcerf doesn't have a found variable, I'm probably missing something
+# Unless the file structure in libcerf changes radically I think this is pretty standard 
+
+
+set(cerf_INCLUDE_DIR ${cerf_DIR}/../../../include/) # this was a hack to make sure it found the right files in the libcerf install
+#currently libcerf is *not* working correctly
+
+include_directories(${HDF5_INCLUDE_DIR}
+	# ${HDF5_CXX_INCLUDE_DIRS}
+		    ${cerf_INCLUDE_DIR}
+		    ${CMAKE_SOURCE_DIR}/src/) #cerf_DIR
 
 add_compile_options(-O3 -Wall)
 

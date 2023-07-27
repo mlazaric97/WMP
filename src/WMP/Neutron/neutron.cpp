@@ -37,7 +37,7 @@ class Neutron {
 	// Current ctor takes the filename as a string, 
 	// To do: copy constructor, more options for constructor (i.e. H5File arg etc.)
 	
-	#include "ctor/ctor.hpp"
+	#include "ctor/ctor.cpp"
 	// data setup as in WMP_library for convenience
 	// data[i][0] is a pole data[i][1:] are the partial residues
 	std::vector<double> xs(double energy, double temp); // returns vector of xs at given E and T might make it private then only access it through xss 

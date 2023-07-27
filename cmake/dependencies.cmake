@@ -1,18 +1,23 @@
 include(FetchContent)
 
-if (NOT TARGET HDF5)
-	FetchContent_Declare( HDF5
+if (NOT HDF5_FOUND)
+	FetchContent_Declare( hdf5
 		GIT_REPOSITORY https://github.com/HDFGroup/hdf5
 		GIT_TAG        origin/develop
 		)
-	FetchContent_MakeAvailable( HDF5 )
+	FetchContent_MakeAvailable( hdf5 )
 endif()
 
-
-target_link_libraries(WMP
-	INTERFACE ${HDF5_LIBRARIES}
-        INTERFACE ${HDF5_CXX_LIBRARIES}	
-
-target_link_libraries(WMP
-	INTERFACE cerf::cerfcpp
+FetchContent_Declare( libcerf
+	GIT_REPOSITORY https://jugit.fz-juelich.de/mlz/libcerf
+	GIT_TAG	       origin/main
 	)
+
+#INTERFACE -DCERF_CPP=ON
+set(CERF_CPP ON)
+
+FetchContent_MakeAvailable( libcerf )
+
+
+get_property(libcerf_location INSTALL libcerf PROPERTY LOCATION)
+message(STATUS "libcerf location = " ${libcerf_location})

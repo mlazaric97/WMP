@@ -1,26 +1,53 @@
+## PREAMBLE ## 
 cmake_minimum_required(VERSION 3.17)
+if(DEFINED PROJECT_NAME)
+	set(SUBPROJECT ON)
+else()
+	set(SUBPROJECT OFF)
+endif()
 
-project(WMP LANGUAGES C CXX)
+project(WMP LANGUAGES CXX C) 
 
-set (CMAKE_CXX_STANDARD 17)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
+enable_language(Fortran) 
 
-find_package(HDF5 REQUIRED COMPONENTS C CXX )
-find_package(cerf REQUIRED ON COMPONENTS C CXX) #can't get it working :/ 
+## SETUP ## 
+find_package(HDF5 REQUIRED COMPONENTS C CXX)
 
-# this was to get around my linker not finding the .h files it should have
-# I don't know why libcerf doesn't have a found variable, I'm probably missing something
-# Unless the file structure in libcerf changes radically I think this is pretty standard 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON) 
 
 
-set(cerf_INCLUDE_DIR ${cerf_DIR}/../../../include/)
 
-include_directories(${HDF5_INCLUDE_DIR}
-	# ${HDF5_CXX_INCLUDE_DIRS}
-		    ${cerf_INCLUDE_DIR}
-		    ${CMAKE_SOURCE_DIR}/src/) #cerf_DIR
+## DEPENDENCIES ## 
+include(cmake/dependencies.cmake)
 
-add_compile_options(-O3 -Wall)
+## LIBRARY SETUP ## 
+add_library(WMP_LIB INTERFACE)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bin/)
+target_include_directories(WMP_LIB
+	INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/src/
+	src/
 
+	)
+
+target_link_libraries(WMP_LIB
+	INTERFACE ${HDF5_LIBRARIES}
+	INTERFACE ${HDF5_CXX_LIBRARIES}
+	INTERFACE cerfcpp
+	)
+
+
+include_directories(	${HDF5_INCLUDE_DIR} 
+			${HDF5_CXX_INCLUDE_DIRS}
+		       	${CMAKE_SOURCE_DIR}/src/ 
+			~/libcerf/lib/ 
+			)
+
+		## top level ## 
+
+if(NOT SUBPROJECT) 
+	add_subdirectory(bin)
+	#	target_link_libraries(WMP 
+	#	PUBLIC WMP_LIB
+	#	)
+endif()
