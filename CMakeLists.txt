@@ -24,6 +24,7 @@ include(cmake/dependencies.cmake)
 ## LIBRARY SETUP ## 
 add_library(WMP_LIB INTERFACE)
 
+
 target_include_directories(WMP_LIB
 	INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/src/
 	src/
@@ -43,6 +44,15 @@ include_directories(	${HDF5_INCLUDE_DIR}
 			~/libcerf/lib/ 
 			)
 
+
+target_sources(WMP_LIB
+	PRIVATE 
+	${CMAKE_CURRENT_LIST_DIR}/src/WMP.hpp
+	PUBLIC 
+	#	${CMAKE_CURRENT_LIST_DIR}/interface/WMP_mod.F90
+	)
+		
+		
 		## top level ## 
 
 if(NOT SUBPROJECT) 

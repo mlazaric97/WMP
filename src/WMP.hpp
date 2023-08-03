@@ -6,7 +6,8 @@
 #include <complex>
 #include <memory>
 #include "H5Cpp.h"
-///#include "cerf.h" currently not being included correctly
+#define CERF_AS_CPP
+#include "cerf.h" 
 #include <tuple>
 
 
