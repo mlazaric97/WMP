@@ -6,7 +6,7 @@
 #include <complex>
 #include <memory>
 #include "H5Cpp.h"
-#define CERF_AS_CPP
+#define CERF_AS_CPP // required for #include cerf.h statement
 #include "cerf.h" 
 #include <tuple>
 
