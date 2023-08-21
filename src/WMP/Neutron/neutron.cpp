@@ -16,6 +16,9 @@ class Neutron {
 	std::string name;  
 	int order,fissionable; 
 	double E_min,E_max,spacing;
+
+
+
 	// Description of Member variales;
 	// Curvefit - holomorphic peice of the cross section
 	// Curvefit[i] - curve fit polynomials for the i'th window  
@@ -32,7 +35,17 @@ class Neutron {
 
 
 	public:
-
+	
+	// accessor functions
+	double get_curvefit(int window_id, int order, int rxn);
+	double get_data(int window_id, int rxn);
+	int*   get_windows(int window_id); // goal for this one is to call a window and a size 2 array of ints
+	int    get_broaden_poly(int window_id);
+	int    get_order();
+	int    get_fissionable(); 
+	double get_E_min(); 
+	double get_E_max(); 
+	double get_spacing(); 
 
 	// Current ctor takes the filename as a string, 
 	// To do: copy constructor, more options for constructor (i.e. H5File arg etc.)
@@ -44,6 +57,57 @@ class Neutron {
 							    // (or whatever the vector version of the function is called)   
 	std::vector<std::vector<double>> WMP(std::vector<double> Energies, double temp);		
 }; 
+
+// get_xxx defintions
+// 
+
+double Neutron::get_curvefit(int window_id, int order, int rxn)
+{
+	return this->curvefit[window_id][order][rxn]; 
+}
+
+double Neutron::get_data(int window_id, int rxn) 
+{
+	return this->curvefit[window_id][rxn];
+}
+
+int*   Neutron::get_windows(int window_id)
+{
+	return this->windows[window_id];
+}
+
+int    Neutron::get_broaden_poly(int window_id)
+{
+	return this->broaden_poly[window_id]
+}
+
+int    Neutron::get_order()
+{
+	return this->order; 
+}
+
+int    Neutron::get_fissionable()
+{
+	return this->fissionable;
+}
+
+double Neutron::get_E_min()
+{
+	return this->E_min; 
+}
+
+double Neutron::get_E_max(); 
+{
+	return this->E_max; 
+}
+
+double Neutron::get_spacing(); 
+{
+	return this->spacing;
+}
+
+// end get_xxx definitions; 
+
 
 std::vector<double> Neutron::xs(double E, double temp) 
 {
