@@ -1,5 +1,5 @@
 
-Neutron(std::string filename, bool verbose = false)
+Neutron(std::string filename, int verbose = 0)
 {
 	// open file
 	H5::H5File file = openhdf(filename);	
@@ -16,7 +16,7 @@ Neutron(std::string filename, bool verbose = false)
 	this->order = curvefit[0].size();
 	
 	
-	
+
 	std::cout << "Order of curvefit = " << this->order << std::endl; 
 	
 	this->E_min = get_E_bounds(isogroup,"E_min");

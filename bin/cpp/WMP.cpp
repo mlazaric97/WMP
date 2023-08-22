@@ -11,7 +11,10 @@ const std::string DATASET_NAME("E_max");
 
 int main(void)
 {
-	WMP::Neutron nn(FILE_NAME, false); 
+
+
+	
+	WMP::Neutron nn(FILE_NAME, 0); 
 	_cerf_cmplx j{12,34};
 
 	

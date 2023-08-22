@@ -54,7 +54,6 @@ target_sources(WMP_LIB
 		
 		
 		## top level ## 
-
 if(NOT SUBPROJECT) 
 	add_subdirectory(bin)
 	#	target_link_libraries(WMP 
