@@ -1,6 +1,4 @@
 
-
-
 // log 10 
 template<class T>
 std::vector<T> logspace(T start, T end, int size)

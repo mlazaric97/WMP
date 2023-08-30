@@ -37,15 +37,15 @@ class Neutron {
 	public:
 	
 	// accessor functions
-	double get_curvefit(int window_id, int order, int rxn);
-	double get_data(int window_id, int rxn);
-	int*   get_windows(int window_id); // goal for this one is to call a window and a size 2 array of ints
-	int    get_broaden_poly(int window_id);
-	int    get_order();
-	int    get_fissionable(); 
-	double get_E_min(); 
-	double get_E_max(); 
-	double get_spacing(); 
+	double grab_curvefit(int window_id, int order, int rxn);
+	std::complex<double> grab_data(int window_id, int rxn);
+	std::vector<int>   grab_windows(int window_id); // goal for this one is to call a window and a size 2 array of ints
+	int    grab_broaden_poly(int window_id);
+	int    grab_order();
+	int    grab_fissionable(); 
+	double grab_E_min(); 
+	double grab_E_max(); 
+	double grab_spacing(); 
 
 	// Current ctor takes the filename as a string, 
 	// To do: copy constructor, more options for constructor (i.e. H5File arg etc.)
@@ -58,55 +58,55 @@ class Neutron {
 	std::vector<std::vector<double>> WMP(std::vector<double> Energies, double temp);		
 }; 
 
-// get_xxx defintions
+// grab_xxx defintions
 // 
 
-double Neutron::get_curvefit(int window_id, int order, int rxn)
+double Neutron::grab_curvefit(int window_id, int order, int rxn)
 {
 	return this->curvefit[window_id][order][rxn]; 
 }
 
-double Neutron::get_data(int window_id, int rxn) 
+std::complex<double> Neutron::grab_data(int window_id, int rxn) 
 {
-	return this->curvefit[window_id][rxn];
+	return this->data[window_id][rxn];
 }
 
-int*   Neutron::get_windows(int window_id)
+std::vector<int>   Neutron::grab_windows(int window_id)
 {
 	return this->windows[window_id];
 }
 
-int    Neutron::get_broaden_poly(int window_id)
+int    Neutron::grab_broaden_poly(int window_id)
 {
-	return this->broaden_poly[window_id]
+	return this->broaden_poly[window_id];
 }
 
-int    Neutron::get_order()
+int    Neutron::grab_order()
 {
 	return this->order; 
 }
 
-int    Neutron::get_fissionable()
+int    Neutron::grab_fissionable()
 {
 	return this->fissionable;
 }
 
-double Neutron::get_E_min()
+double Neutron::grab_E_min()
 {
 	return this->E_min; 
 }
 
-double Neutron::get_E_max(); 
+double Neutron::grab_E_max() 
 {
 	return this->E_max; 
 }
 
-double Neutron::get_spacing(); 
+double Neutron::grab_spacing() 
 {
 	return this->spacing;
 }
 
-// end get_xxx definitions; 
+// end grab_xxx definitions; 
 
 
 std::vector<double> Neutron::xs(double E, double temp) 
@@ -152,11 +152,11 @@ std::vector<double> Neutron::xs(double E, double temp)
 	return sigmas; 
 }
 
-
 std::vector<std::vector<double>> Neutron::WMP(std::vector<double> E, double T)
 {
 	int l = E.size();
-	std::vector<std::vector<double>> xs_vec(l,std::vector<double>(3,0.0)); // same length as the E vector, 3 xs's per energy total, absorption, fission 
+	std::vector<std::vector<double>> xs_vec(l,std::vector<double>(3,0.0)); // same length as the E vector, 3 xs's per energy total, absorption
+									       // fission 
 	
 	for (int i{}; i < l; ++i)
 	{

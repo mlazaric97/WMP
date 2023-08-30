@@ -1,6 +1,6 @@
-add_executable(WMP.exe WMP.cpp)
+add_executable(WMP_cpp.exe WMP.cpp)
 	
-target_link_libraries(WMP.exe
+target_link_libraries(WMP_cpp.exe
 	WMP_LIB	
 	)
 

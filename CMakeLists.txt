@@ -42,6 +42,7 @@ include_directories(	${HDF5_INCLUDE_DIR}
 			${HDF5_CXX_INCLUDE_DIRS}
 		       	${CMAKE_SOURCE_DIR}/src/ 
 			~/libcerf/lib/ 
+			${CMAKE_CURRENT_LIST_DIR}/interface/
 			)
 
 
@@ -49,7 +50,7 @@ target_sources(WMP_LIB
 	PRIVATE 
 	${CMAKE_CURRENT_LIST_DIR}/src/WMP.hpp
 	PUBLIC 
-	#	${CMAKE_CURRENT_LIST_DIR}/interface/WMP_mod.F90
+	${CMAKE_CURRENT_LIST_DIR}/interface/WMP_mod.F90
 	)
 		
 		
